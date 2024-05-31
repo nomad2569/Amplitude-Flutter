@@ -12,7 +12,8 @@ class _FlushThresholdFormState extends State<FlushThresholdForm> {
       TextEditingController(text: '5');
   final TextEditingController eventUploadPeriodMillisInput =
       TextEditingController(text: '30000');
-  final EdgeInsetsGeometry contentPadding = EdgeInsets.symmetric(horizontal: 8, vertical: 8);
+  final EdgeInsetsGeometry contentPadding =
+      EdgeInsets.symmetric(horizontal: 8, vertical: 8);
 
   void onPressSetUploadThreshold() {
     final value = int.tryParse(eventUploadThresholdInput.text);
@@ -39,7 +40,8 @@ class _FlushThresholdFormState extends State<FlushThresholdForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Flush Intervals', style: Theme.of(context).textTheme.headline5),
+        Text('Flush Intervals',
+            style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 10),
         TextField(
             decoration: InputDecoration(
