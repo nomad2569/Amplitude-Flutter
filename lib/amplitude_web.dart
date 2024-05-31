@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:js/js_util.dart' as js;
+import 'dart:js_interop';
 
 import 'web/amplitude_js.dart';
 
@@ -73,7 +74,8 @@ class AmplitudeFlutterPlugin {
       case "setEventUploadPeriodMillis":
         {
           int eventUploadPeriodMillis = args['eventUploadPeriodMillis'];
-          return amplitude.options.eventUploadPeriodMillis = eventUploadPeriodMillis;
+          return amplitude.options.eventUploadPeriodMillis =
+              eventUploadPeriodMillis;
         }
       case "regenerateDeviceId":
         {
@@ -92,7 +94,7 @@ class AmplitudeFlutterPlugin {
               : null;
           bool outOfSession = args['outOfSession'] ?? false;
           return amplitude.logEvent(
-              eventType, eventProperties, null, null, outOfSession);
+              eventType, eventProperties.jsify(), null, null, outOfSession);
         }
       case "logRevenue":
         {
@@ -131,7 +133,7 @@ class AmplitudeFlutterPlugin {
       case "setUserProperties":
         {
           var userProperties = mapToJSObj(args['userProperties']);
-          return amplitude.setUserProperties(userProperties);
+          return amplitude.setUserProperties(userProperties.jsify()!);
         }
       case "clearUserProperties":
         {
@@ -192,12 +194,15 @@ class AmplitudeFlutterPlugin {
   }
 
   Object mapToJSObj(Map<dynamic, dynamic> map) {
-    var object = js.newObject();
+    var object = JSObject();
+
     map.forEach((k, v) {
       var key = k;
       var value = (v is Map) ? mapToJSObj(v) : v;
-      js.setProperty(object, key, value);
+
+      object.setProperty(key, value);
     });
+
     return object;
   }
 
